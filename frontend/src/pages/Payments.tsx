@@ -41,8 +41,14 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import dayjs from 'dayjs';
 import utc from 'dayjs/plugin/utc';
 import timezone from 'dayjs/plugin/timezone';
+import weekOfYear from 'dayjs/plugin/weekOfYear';
+import advancedFormat from 'dayjs/plugin/advancedFormat';
+import isoWeek from 'dayjs/plugin/isoWeek';
 dayjs.extend(utc);
 dayjs.extend(timezone);
+dayjs.extend(weekOfYear);
+dayjs.extend(advancedFormat);
+dayjs.extend(isoWeek);
 import MonetizationOnIcon from '@mui/icons-material/MonetizationOn';
 import ListAltIcon from '@mui/icons-material/ListAlt';
 import PaymentIcon from '@mui/icons-material/Payment';
@@ -114,7 +120,7 @@ export const Payments = () => {
     if (value) setGroupBy(value);
   };
   const TIMEZONE = 'Africa/Nairobi';
-  const getPaymentDate = (p: Payment) => p.paidAt || p.createdAt;
+  const getPaymentDate = (p: Payment) => p.paidAt || p.order?.createdAt || p.createdAt;
 
   // Helper to get week start (Monday) for a date
   function getWeekStart(date: string) {
@@ -191,7 +197,7 @@ export const Payments = () => {
   const completedPayments = payments.filter(p => p.status === 'completed');
   const paymentsByDay: Record<string, typeof completedPayments> = {};
   completedPayments.forEach(payment => {
-    const date = dayjs(payment.paidAt || payment.createdAt).format('YYYY-MM-DD');
+    const date = dayjs(getPaymentDate(payment)).format('YYYY-MM-DD');
     if (!paymentsByDay[date]) paymentsByDay[date] = [];
     paymentsByDay[date].push(payment);
   });
@@ -591,7 +597,7 @@ export const Payments = () => {
                 </TableRow>
               ) : (
                 sortedGroupKeys.map(groupKey => {
-                  const groupPayments = groups[groupKey].slice().sort((a, b) => dayjs(b.paidAt || b.createdAt).unix() - dayjs(a.paidAt || a.createdAt).unix());
+                  const groupPayments = groups[groupKey].slice().sort((a, b) => dayjs(getPaymentDate(b)).unix() - dayjs(getPaymentDate(a)).unix());
                   // Summary for this group
                   let groupLabel = '';
                   if (groupBy === 'day') {
@@ -616,7 +622,7 @@ export const Payments = () => {
                       </TableRow>
                       {expandedGroups[groupKey] && groupPayments.map(payment => (
                         <TableRow key={payment.id}>
-                          <TableCell sx={{ pl: 6 }}>{dayjs(payment.paidAt || payment.createdAt).format('DD MMM YYYY HH:mm')}</TableCell>
+                          <TableCell sx={{ pl: 6 }}>{dayjs(getPaymentDate(payment)).format('DD MMM YYYY HH:mm')}</TableCell>
                           <TableCell>{payment.order?.tableNumber || '-'}</TableCell>
                           <TableCell align="right">{formatCurrency(Number(payment.amount))}</TableCell>
                           <TableCell>{payment.method.toUpperCase()}</TableCell>

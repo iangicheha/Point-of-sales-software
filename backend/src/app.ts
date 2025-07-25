@@ -23,7 +23,12 @@ import { AppDataSource } from './data-source';
 dotenv.config();
 
 const app = express();
-app.use(cors());
+
+const allowedOrigin = process.env.FRONTEND_URL || '*';
+app.use(cors({
+  origin: allowedOrigin,
+  credentials: true
+}));
 app.use(express.json());
 app.use('/api', healthRoutes);
 app.use('/api/auth', authRoutes);
@@ -45,13 +50,17 @@ app.use('/api/notifications', notificationRoutes);
 
 const PORT = process.env.PORT || 5000;
 
-AppDataSource.initialize()
-  .then(() => {
-    app.listen(PORT, () => {
-      console.log(`Server running on port ${PORT}`);
+if (process.env.NODE_ENV !== 'test') {
+  AppDataSource.initialize()
+    .then(() => {
+      app.listen(PORT, () => {
+        console.log(`Server running on port ${PORT}`);
+      });
+    })
+    .catch((err) => {
+      console.error('Failed to connect to the database', err);
+      process.exit(1);
     });
-  })
-  .catch((err) => {
-    console.error('Failed to connect to the database', err);
-    process.exit(1);
-  }); 
+}
+
+export default app; 

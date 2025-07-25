@@ -37,7 +37,9 @@ router.post('/callback', async (req, res) => {
     if (payment) {
       payment.status = 'completed';
       payment.transactionRef = mpesaReceipt;
-      payment.paidAt = new Date();
+      if (!payment.paidAt) {
+        payment.paidAt = new Date();
+      }
       await repo.save(payment);
     }
   }

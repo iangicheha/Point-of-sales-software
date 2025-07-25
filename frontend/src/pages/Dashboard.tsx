@@ -188,14 +188,18 @@ export const Dashboard = () => {
     (order) => order.payments?.some((p: Payment) => p.status === 'completed')
   );
 
+  const TIMEZONE = 'Africa/Nairobi';
+  // Helper to get the payment date (paidAt, order.createdAt, createdAt)
+  const getPaymentDate = (payment: any) => payment.paidAt || payment.order?.createdAt || payment.createdAt;
+
   // Group complete orders by day
   const completeOrdersByDay: Record<string, Order[]> = {};
   completeOrdersList.forEach(order => {
     // Find the completed payment for this order
     const completedPayment = order.payments?.find((p: Payment) => p.status === 'completed');
     if (!completedPayment) return;
-    // Use paidAt if available, otherwise fallback to createdAt, and group by local date
-    const date = dayjs(completedPayment.paidAt || completedPayment.createdAt).format('YYYY-MM-DD');
+    // Use getPaymentDate and group by local date
+    const date = dayjs(getPaymentDate(completedPayment)).tz(TIMEZONE).format('YYYY-MM-DD');
     if (!completeOrdersByDay[date]) completeOrdersByDay[date] = [];
     completeOrdersByDay[date].push(order);
   });
@@ -240,11 +244,7 @@ export const Dashboard = () => {
   const animatedRoomsOccupied = useCountUp(occupiedRooms);
   const animatedOngoingOrders = useCountUp(ongoingOrdersList.length);
 
-  // Helper to get the payment date (paidAt or createdAt)
-  const getPaymentDate = (payment: any) => payment.paidAt || payment.createdAt;
-
   // Calculate today's total sales (use Africa/Nairobi local time)
-  const TIMEZONE = 'Africa/Nairobi';
   const today = dayjs().tz(TIMEZONE).format('YYYY-MM-DD');
   const totalSalesTodayValue = payments
     .filter((p) => p.status === 'completed' && dayjs(getPaymentDate(p)).tz(TIMEZONE).format('YYYY-MM-DD') === today)
@@ -393,7 +393,7 @@ export const Dashboard = () => {
                     <React.Fragment key={date}>
                       <ListItem sx={{ bgcolor: '#f5f5f5', borderRadius: 1, mb: 1, cursor: 'pointer' }} onClick={() => handleToggleDay(date)}>
                         <ListItemText
-                          primary={<Typography component="span" variant="subtitle1" sx={{ fontWeight: 600 }}>{dayjs(date).format('DD MMMM YYYY')}</Typography>}
+                          primary={<Typography component="span" variant="subtitle1" sx={{ fontWeight: 600 }}>{dayjs(date).tz(TIMEZONE).format('DD MMMM YYYY')}</Typography>}
                           secondary={
                             <>
                               <Typography component="span" variant="body2">Total Orders: {totalOrders}</Typography>

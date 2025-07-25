@@ -44,11 +44,18 @@ export const PaymentHistory = () => {
     fetchPayments();
   }, [token]);
 
+  // Helper to get the payment date for a payment
+  const getPaymentDate = (payment: any) =>
+    payment.paidAt ||
+    payment.order?.createdAt ||
+    payment.createdAt ||
+    new Date().toISOString();
+
   // Group completed payments by day
   const completedPayments = payments.filter(p => p.status === 'completed');
   const paymentsByDay: Record<string, typeof completedPayments> = {};
   completedPayments.forEach(payment => {
-    const date = dayjs(payment.paidAt || payment.createdAt).format('YYYY-MM-DD');
+    const date = dayjs(getPaymentDate(payment)).format('YYYY-MM-DD');
     if (!paymentsByDay[date]) paymentsByDay[date] = [];
     paymentsByDay[date].push(payment);
   });
@@ -166,9 +173,9 @@ export const PaymentHistory = () => {
                                                 Table {payment.order?.tableNumber || '-'}
                                               </>}
                                               secondary={<>
-                                                <div>Method: {payment.method.toUpperCase()}</div>
-                                                <div>Amount: KES {Number(payment.amount).toLocaleString()}</div>
-                                                <div>Status: {payment.status}</div>
+                                                <span>Method: {payment.method.toUpperCase()}</span><br />
+                                                <span>Amount: KES {Number(payment.amount).toLocaleString()}</span><br />
+                                                <span>Status: {payment.status}</span>
                                               </>}
                                             />
                                           </ListItem>
@@ -254,9 +261,9 @@ export const PaymentHistory = () => {
                       Table {payment.order?.tableNumber || '-'}
                     </>}
                     secondary={<>
-                      <div>Method: {payment.method.toUpperCase()}</div>
-                      <div>Amount: KES {Number(payment.amount).toLocaleString()}</div>
-                      <div>Status: {payment.status}</div>
+                      <span>Method: {payment.method.toUpperCase()}</span><br />
+                      <span>Amount: KES {Number(payment.amount).toLocaleString()}</span><br />
+                      <span>Status: {payment.status}</span>
                     </>}
                   />
                 </ListItem>
