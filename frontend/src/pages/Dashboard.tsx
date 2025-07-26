@@ -307,7 +307,8 @@ export const Dashboard = () => {
     } catch {}
   };
 
-  if (!user) return <div />;
+  // Temporarily removed user check for demo purposes
+  // if (!user) return <div />;
 
   return (
     <Box sx={{ p: { xs: 1, md: 3 }, width: '100%', maxWidth: 1300, margin: '0 auto' }}>

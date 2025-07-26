@@ -21,7 +21,8 @@ export const Sidebar = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  if (!user) return null;
+  // Temporarily removed user check for demo purposes
+  // if (!user) return null;
 
   return (
     <div style={{

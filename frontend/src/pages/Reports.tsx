@@ -41,12 +41,16 @@ export const Reports = () => {
   };
 
   useEffect(() => {
-    if (user?.role === 'admin') fetchReport();
+    // Temporarily removed role check for demo purposes
+    // if (user?.role === 'admin') fetchReport();
+    fetchReport();
     // eslint-disable-next-line
   }, [token]);
 
   useEffect(() => {
-    if (user?.role === 'admin') fetchReport(period);
+    // Temporarily removed role check for demo purposes
+    // if (user?.role === 'admin') fetchReport(period);
+    fetchReport(period);
     // eslint-disable-next-line
   }, [period]);
 
@@ -95,7 +99,8 @@ export const Reports = () => {
 
   const topProduct = report?.topProducts?.[0];
 
-  if (user?.role !== 'admin') return <div />;
+  // Temporarily removed role check for demo purposes
+  // if (user?.role !== 'admin') return <div />;
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
 

@@ -91,7 +91,8 @@ export const Menu = () => {
     item.category.toLowerCase().includes(search.toLowerCase())
   );
 
-  if (user?.role !== 'admin') return <div />;
+  // Temporarily removed role check for demo purposes
+  // if (user?.role !== 'admin') return <div />;
 
   return (
     <Paper style={{ padding: 24 }}>

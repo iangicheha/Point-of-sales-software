@@ -25,8 +25,10 @@ import { EditPurchaseOrder } from './pages/purchase_order/EditPurchaseOrder';
 const theme = createTheme();
 
 function PrivateRoute({ children }: { children: JSX.Element }) {
-  const { user } = useAuth();
-  return user ? children : <Navigate to="/login" />;
+  // Temporarily removed login requirement for demo purposes
+  // const { user } = useAuth();
+  // return user ? children : <Navigate to="/login" />;
+  return children;
 }
 
 function App() {

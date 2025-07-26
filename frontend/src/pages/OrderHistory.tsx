@@ -58,7 +58,8 @@ export const OrderHistory = () => {
     fetchOrders();
   }, [token]);
 
-  if (!user) return <div />;
+  // Temporarily removed user check for demo purposes
+  // if (!user) return <div />;
   if (loading) return <CircularProgress />;
   if (error) return <Alert severity="error">{error}</Alert>;
 
