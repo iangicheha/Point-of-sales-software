@@ -1,0 +1,13 @@
+{
+  "name": "pos-software",
+  "version": "1.0.0",
+  "description": "Point of Sale System for Belmont Hotel",
+  "scripts": {
+    "build": "cd backend && npm install && npm run build",
+    "start": "cd backend && node dist/app.js",
+    "dev": "cd backend && npm run dev"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 
