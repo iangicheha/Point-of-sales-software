@@ -21,9 +21,32 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
-// Mock data
-// const roomsAvailable = 16; // total available rooms
-// const roomsOccupied = 14;
+// Mock data for demo purposes
+const mockOrders = [
+  { id: 1, tableNumber: 'A1', status: 'completed', items: [{ price: 1500, quantity: 2, menuItem: { name: 'Fish' } }] },
+  { id: 2, tableNumber: 'B3', status: 'pending', items: [{ price: 800, quantity: 1, menuItem: { name: 'Chicken' } }] },
+  { id: 3, tableNumber: 'C2', status: 'completed', items: [{ price: 1200, quantity: 3, menuItem: { name: 'Soda' } }] },
+];
+
+const mockPayments = [
+  { id: 1, status: 'completed', method: 'cash', amount: 1500, paidAt: new Date().toISOString() },
+  { id: 2, status: 'completed', method: 'mpesa', amount: 800, paidAt: new Date().toISOString() },
+  { id: 3, status: 'pending', method: 'card', amount: 1200, paidAt: new Date().toISOString() },
+];
+
+const mockRooms = [
+  { id: 1, number: '101', status: 'occupied', type: 'Standard' },
+  { id: 2, number: '102', status: 'available', type: 'Deluxe' },
+  { id: 3, number: '103', status: 'occupied', type: 'Suite' },
+  { id: 4, number: '104', status: 'available', type: 'Standard' },
+];
+
+const mockNotifications = [
+  { id: 1, type: 'info', message: 'New order received from Table A1', createdAt: new Date().toISOString(), read: false },
+  { id: 2, type: 'warning', message: 'Low stock alert: Fish running low', createdAt: new Date().toISOString(), read: false },
+  { id: 3, type: 'success', message: 'Payment completed for Order #123', createdAt: new Date().toISOString(), read: true },
+];
+
 const totalSalesToday = 24500;
 const topSellers = [
   { name: 'Fish', sold: 32 },
@@ -32,6 +55,7 @@ const topSellers = [
   { name: 'Fries', sold: 22 },
   { name: 'Coffee', sold: 18 },
 ];
+
 // Notifications state
 interface Notification {
   id: number;
@@ -89,14 +113,14 @@ export const Dashboard = () => {
   const theme = useTheme();
   const navigate = useNavigate();
   const { token, user } = useAuth();
-  const [orders, setOrders] = useState<Order[]>([]);
+  const [orders, setOrders] = useState<Order[]>(mockOrders);
   const [loadingOrders, setLoadingOrders] = useState(false);
-  const [payments, setPayments] = useState<any[]>([]);
+  const [payments, setPayments] = useState<any[]>(mockPayments);
   const [loadingPayments, setLoadingPayments] = useState(false);
-  const [rooms, setRooms] = useState<any[]>([]);
+  const [rooms, setRooms] = useState<any[]>(mockRooms);
   const [loadingRooms, setLoadingRooms] = useState(false);
   const [expandedDays, setExpandedDays] = useState<Record<string, boolean>>({});
-  const [notifications, setNotifications] = useState<Notification[]>([]);
+  const [notifications, setNotifications] = useState<Notification[]>(mockNotifications);
 
   const handleToggleDay = (date: string) => {
     setExpandedDays(prev => ({ ...prev, [date]: !prev[date] }));
@@ -114,7 +138,8 @@ export const Dashboard = () => {
         });
         setOrders(res.data);
       } catch (err) {
-        setOrders([]);
+        console.log('Using mock orders data');
+        setOrders(mockOrders);
       }
       setLoadingOrders(false);
     };
@@ -130,7 +155,8 @@ export const Dashboard = () => {
         });
         setPayments(res.data);
       } catch (err) {
-        setPayments([]);
+        console.log('Using mock payments data');
+        setPayments(mockPayments);
       }
       setLoadingPayments(false);
     };
@@ -146,7 +172,8 @@ export const Dashboard = () => {
         });
         setRooms(res.data);
       } catch (err) {
-        setRooms([]);
+        console.log('Using mock rooms data');
+        setRooms(mockRooms);
       }
       setLoadingRooms(false);
     };
@@ -159,7 +186,8 @@ export const Dashboard = () => {
         });
         setNotifications(res.data);
       } catch (err) {
-        setNotifications([]);
+        console.log('Using mock notifications data');
+        setNotifications(mockNotifications);
       }
     };
     fetchOrders();

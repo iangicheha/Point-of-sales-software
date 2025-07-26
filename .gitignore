@@ -6,3 +6,4 @@ build/
 *.sqlite
 *.zip
 .DS_Store
+.vercel

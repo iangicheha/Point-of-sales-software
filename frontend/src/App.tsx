@@ -24,6 +24,56 @@ import { EditPurchaseOrder } from './pages/purchase_order/EditPurchaseOrder';
 
 const theme = createTheme();
 
+// Error Boundary Component
+class ErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError(error: any) {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: any, errorInfo: any) {
+    console.log('Error caught by boundary:', error, errorInfo);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{ 
+          padding: '20px', 
+          textAlign: 'center',
+          fontFamily: 'Arial, sans-serif',
+          color: '#333'
+        }}>
+          <h2>Something went wrong</h2>
+          <p>Please refresh the page or try again later.</p>
+          <button 
+            onClick={() => window.location.reload()}
+            style={{
+              padding: '10px 20px',
+              backgroundColor: '#1976d2',
+              color: 'white',
+              border: 'none',
+              borderRadius: '4px',
+              cursor: 'pointer'
+            }}
+          >
+            Refresh Page
+          </button>
+        </div>
+      );
+    }
+
+    return this.props.children;
+  }
+}
+
 function PrivateRoute({ children }: { children: JSX.Element }) {
   // Temporarily removed login requirement for demo purposes
   // const { user } = useAuth();
@@ -33,70 +83,72 @@ function PrivateRoute({ children }: { children: JSX.Element }) {
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <CssBaseline />
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route path="/login" element={<Login />} />
-            <Route
-              path="*"
-              element={
-                <PrivateRoute>
-                  <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
-                    {/* Fixed Sidebar */}
-                    <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 1200 }}>
-                      <Sidebar />
-                    </div>
-                    {/* Main area with fixed Topbar and scrollable content */}
-                    <div style={{
-                      marginLeft: 220, // Sidebar width
-                      flex: 1,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      minHeight: '100vh',
-                      position: 'relative',
-                    }}>
-                      {/* Fixed Topbar */}
-                      <div style={{ position: 'fixed', top: 0, left: 220, right: 0, zIndex: 1100, width: 'calc(100vw - 220px)' }}>
-                        <Topbar />
+    <ErrorBoundary>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route path="/login" element={<Login />} />
+              <Route
+                path="*"
+                element={
+                  <PrivateRoute>
+                    <div style={{ display: 'flex', minHeight: '100vh', position: 'relative' }}>
+                      {/* Fixed Sidebar */}
+                      <div style={{ position: 'fixed', top: 0, left: 0, height: '100vh', zIndex: 1200 }}>
+                        <Sidebar />
                       </div>
-                      {/* Scrollable content area */}
+                      {/* Main area with fixed Topbar and scrollable content */}
                       <div style={{
+                        marginLeft: 220, // Sidebar width
                         flex: 1,
-                        marginTop: 64, // Topbar height
-                        padding: 32,
-                        overflowY: 'auto',
-                        height: 'calc(100vh - 64px)',
-                        background: '#f7f9fc',
+                        display: 'flex',
+                        flexDirection: 'column',
+                        minHeight: '100vh',
+                        position: 'relative',
                       }}>
-                        <Routes>
-                          <Route path="/dashboard" element={<Dashboard />} />
-                          <Route path="/order" element={<Order />} />
-                          <Route path="/order-history" element={<OrderHistory />} />
-                          <Route path="/inventory" element={<Inventory />} />
-                          <Route path="/purchase-order" element={<PurchaseOrder />} />
-                          <Route path="/purchase-order/new" element={<NewPurchaseOrder />} />
-                          <Route path="/purchase-order/:id" element={<ViewPurchaseOrder />} />
-                          <Route path="/purchase-order/:id/edit" element={<EditPurchaseOrder />} />
-                          <Route path="/payments" element={<Payments />} />
-                          <Route path="/users" element={<Users />} />
-                          <Route path="/rooms" element={<Rooms />} />
-                          <Route path="/menu" element={<Menu />} />
-                          <Route path="/reports" element={<Reports />} />
-                          <Route path="/payment-history" element={<PaymentHistory />} />
-                          <Route path="*" element={<Navigate to="/dashboard" />} />
-                        </Routes>
+                        {/* Fixed Topbar */}
+                        <div style={{ position: 'fixed', top: 0, left: 220, right: 0, zIndex: 1100, width: 'calc(100vw - 220px)' }}>
+                          <Topbar />
+                        </div>
+                        {/* Scrollable content area */}
+                        <div style={{
+                          flex: 1,
+                          marginTop: 64, // Topbar height
+                          padding: 32,
+                          overflowY: 'auto',
+                          height: 'calc(100vh - 64px)',
+                          background: '#f7f9fc',
+                        }}>
+                          <Routes>
+                            <Route path="/dashboard" element={<Dashboard />} />
+                            <Route path="/order" element={<Order />} />
+                            <Route path="/order-history" element={<OrderHistory />} />
+                            <Route path="/inventory" element={<Inventory />} />
+                            <Route path="/purchase-order" element={<PurchaseOrder />} />
+                            <Route path="/purchase-order/new" element={<NewPurchaseOrder />} />
+                            <Route path="/purchase-order/:id" element={<ViewPurchaseOrder />} />
+                            <Route path="/purchase-order/:id/edit" element={<EditPurchaseOrder />} />
+                            <Route path="/payments" element={<Payments />} />
+                            <Route path="/users" element={<Users />} />
+                            <Route path="/rooms" element={<Rooms />} />
+                            <Route path="/menu" element={<Menu />} />
+                            <Route path="/reports" element={<Reports />} />
+                            <Route path="/payment-history" element={<PaymentHistory />} />
+                            <Route path="*" element={<Navigate to="/dashboard" />} />
+                          </Routes>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </PrivateRoute>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </ThemeProvider>
+                  </PrivateRoute>
+                }
+              />
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   );
 }
 
