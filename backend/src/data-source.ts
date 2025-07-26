@@ -22,6 +22,9 @@ export const AppDataSource = new DataSource({
   url: process.env.DATABASE_URL,
   synchronize: true, // set to false in production
   logging: false,
+  ssl: {
+    rejectUnauthorized: false
+  },
   entities: [User, Room, MenuItem, Order, OrderItem, Inventory, Payment, Reservation, RoomService, Supplier, PurchaseOrder, PurchaseOrderItem, InventoryCount, InventoryCountItem, VendorReturn, VendorReturnItem, Notification],
   migrations: [],
   subscribers: [],
