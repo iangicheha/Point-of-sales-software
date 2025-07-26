@@ -180,11 +180,11 @@ export const Dashboard = () => {
   });
 
   // Split orders based on payment status
-  const ongoingOrdersList = orders.filter(
+  const ongoingOrdersList = (orders || []).filter(
     (order) => !order.payments?.some((p: Payment) => p.status === 'completed')
   );
 
-  const completeOrdersList = orders.filter(
+  const completeOrdersList = (orders || []).filter(
     (order) => order.payments?.some((p: Payment) => p.status === 'completed')
   );
 
@@ -235,9 +235,9 @@ export const Dashboard = () => {
   });
 
   // Calculate dynamic room stats
-  const totalRooms = rooms.length;
-  const occupiedRooms = rooms.filter((room: any) => room.status === 'occupied').length;
-  const availableRooms = rooms.filter((room: any) => room.status === 'vacant').length;
+  const totalRooms = (rooms || []).length;
+  const occupiedRooms = (rooms || []).filter((room: any) => room.status === 'occupied').length;
+  const availableRooms = (rooms || []).filter((room: any) => room.status === 'vacant').length;
 
   // Animated numbers
   const animatedRoomsAvailable = useCountUp(availableRooms);
@@ -246,7 +246,7 @@ export const Dashboard = () => {
 
   // Calculate today's total sales (use Africa/Nairobi local time)
   const today = dayjs().tz(TIMEZONE).format('YYYY-MM-DD');
-  const totalSalesTodayValue = payments
+  const totalSalesTodayValue = (payments || [])
     .filter((p) => p.status === 'completed' && dayjs(getPaymentDate(p)).tz(TIMEZONE).format('YYYY-MM-DD') === today)
     .reduce((sum, p) => sum + Number(p.amount), 0);
 
@@ -442,7 +442,7 @@ export const Dashboard = () => {
             <CardContent>
               <Typography variant="h6" sx={{ mb: 2, fontWeight: 600, display: 'flex', alignItems: 'center' }}>
                 Notifications
-               {notifications.length > 0 && (
+               {(notifications || []).length > 0 && (
                  <DeleteIcon
                    onClick={handleClearAllNotifications}
                    sx={{ ml: 1, cursor: 'pointer', color: 'error.main' }}
@@ -452,11 +452,11 @@ export const Dashboard = () => {
               </Typography>
               <Box sx={{ maxHeight: 260, overflowY: 'auto' }}>
                 <List dense>
-                 {notifications.length === 0 ? (
+                 {(notifications || []).length === 0 ? (
                    <ListItem alignItems="flex-start">
                      <ListItemText primary="No notifications." />
                    </ListItem>
-                 ) : notifications.map((note, idx) => (
+                 ) : (notifications || []).map((note, idx) => (
                     <ListItem key={note.id} alignItems="flex-start"
                       secondaryAction={
                         <DeleteIcon
