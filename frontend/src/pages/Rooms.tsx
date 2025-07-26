@@ -600,12 +600,14 @@ export const Rooms = () => {
                 value={bookingForm.checkIn}
                 onChange={(date: Dayjs | null) => setBookingForm(f => ({ ...f, checkIn: date as Dayjs }))}
                 minDate={dayjs()}
+                renderInput={(params) => <TextField {...params} />}
               />
               <DatePicker
                 label="Check-out"
                 value={bookingForm.checkOut}
                 onChange={(date: Dayjs | null) => setBookingForm(f => ({ ...f, checkOut: date as Dayjs }))}
                 minDate={bookingForm.checkIn.add(1, 'day')}
+                renderInput={(params) => <TextField {...params} />}
               />
             </Box>
             <Box display="flex" gap={2}>
