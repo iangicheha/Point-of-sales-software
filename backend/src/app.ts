@@ -58,4 +58,6 @@ AppDataSource.initialize()
   .catch((err) => {
     console.error('Failed to connect to the database', err);
     process.exit(1);
-  }); 
+  });
+
+export default app; 
