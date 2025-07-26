@@ -219,7 +219,7 @@ export const OrderHistory = () => {
               </TableRow>
             ) : (
               (() => {
-                let rows: React.ReactNode[] = [];
+                const rows: React.ReactNode[] = [];
                 let weekOrders = 0, weekSales = 0, prevWeekSales: number | null = null, weekStart: string | null = null, weekEnd: string | null = null;
                 let lastWeek: string | null = null;
                 let weekDays: { date: string, totalOrders: number, totalSales: number, percentChange: number | null }[] = [];

@@ -828,7 +828,7 @@ export const Inventory = () => {
         <DialogTitle>Confirm Deletion</DialogTitle>
         <DialogContent>
           <Typography component="span">
-            Are you sure you want to delete item "{itemToDelete?.name}"? This action cannot be undone.
+            Are you sure you want to delete item &quot;{itemToDelete?.name}&quot;? This action cannot be undone.
           </Typography>
         </DialogContent>
         <DialogActions>

@@ -106,7 +106,7 @@ export const PaymentHistory = () => {
               </TableRow>
             ) : (
               (() => {
-                let rows: React.ReactNode[] = [];
+                const rows: React.ReactNode[] = [];
                 let monthPayments = 0, monthAmount = 0, prevMonthAmount: number | null = null, monthStart: string | null = null, monthEnd: string | null = null;
                 let lastMonth: string | null = null;
                 let monthDays: { date: string, totalPayments: number, totalAmount: number, percentChange: number | null }[] = [];

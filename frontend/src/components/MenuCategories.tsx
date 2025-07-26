@@ -37,15 +37,15 @@ export const MenuCategories: React.FC<MenuCategoriesProps> = ({ items, onSelectI
   }, [categories, selectedCategory]);
 
   // Ensure selectedCategory is always valid before rendering Tabs
-  if (categories.length > 0 && !categories.includes(selectedCategory)) {
-    setSelectedCategory(categories[0]);
-    return null; // Prevent rendering until state is valid
-  }
-
   const filteredItems = React.useMemo(() => 
     items.filter(item => item.category === selectedCategory),
     [items, selectedCategory]
   );
+
+  if (categories.length > 0 && !categories.includes(selectedCategory)) {
+    setSelectedCategory(categories[0]);
+    return null; // Prevent rendering until state is valid
+  }
 
   return (
     <Box sx={{ width: '100%' }}>
