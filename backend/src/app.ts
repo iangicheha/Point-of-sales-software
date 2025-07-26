@@ -24,15 +24,6 @@ dotenv.config();
 
 const app = express();
 
-// Initialize database connection
-AppDataSource.initialize()
-  .then(() => {
-    console.log('Database connected successfully');
-  })
-  .catch((err) => {
-    console.error('Failed to connect to the database', err);
-  });
-
 const allowedOrigin = process.env.FRONTEND_URL || '*';
 app.use(cors({
   origin: allowedOrigin,
@@ -57,17 +48,14 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/inventory-counts', inventoryCountRoutes);
 app.use('/api/notifications', notificationRoutes);
 
-// Health check endpoint for Vercel
-app.get('/api/health', (req, res) => {
-  res.json({ status: 'OK', timestamp: new Date().toISOString() });
-});
-
-// Only start the server if not in Vercel environment
-if (process.env.NODE_ENV !== 'production' && process.env.NODE_ENV !== 'test') {
-  const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
-}
-
-export default app; 
+const PORT = process.env.PORT || 5000;
+AppDataSource.initialize()
+  .then(() => {
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error('Failed to connect to the database', err);
+    process.exit(1);
+  }); 
