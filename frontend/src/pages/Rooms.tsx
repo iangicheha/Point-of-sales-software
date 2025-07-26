@@ -89,6 +89,30 @@ export const Rooms = () => {
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
 
+  // Add the missing fetchRooms function above the useEffect that calls it
+  const fetchRooms = async () => {
+    setLoading(true);
+    setError('');
+    try {
+      const res = await axios.get('/api/rooms', { 
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      // Sort rooms by number (as string or number)
+      const sortedRooms = [...res.data].sort((a, b) => {
+        // Try to compare as numbers, fallback to string
+        const numA = parseInt(a.number, 10);
+        const numB = parseInt(b.number, 10);
+        if (!isNaN(numA) && !isNaN(numB)) return numA - numB;
+        return a.number.localeCompare(b.number);
+      });
+      setRooms(sortedRooms);
+      setFilteredRooms(sortedRooms);
+    } catch (err) {
+      setError('Failed to load rooms');
+    }
+    setLoading(false);
+  };
+
   useEffect(() => {
     if (!user || (user.role !== 'admin' && user.role !== 'frontdesk')) return;
     fetchRooms();
