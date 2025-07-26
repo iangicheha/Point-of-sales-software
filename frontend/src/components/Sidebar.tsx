@@ -41,7 +41,7 @@ export const Sidebar = () => {
     }}>
       <img src="/chatgpt.png" alt="ChatGPT" style={{ width: 120, height: 120, objectFit: 'cover', borderRadius: 16, margin: '32px 0 24px 0', boxShadow: '0 2px 12px rgba(0,0,0,0.10)' }} />
       <List style={{ width: '100%' }}>
-        {navLinks.filter(link => !link.roles || link.roles.includes(user.role)).map(link => (
+        {navLinks.filter(link => !link.roles || link.roles.includes(user?.role || 'admin')).map(link => (
           <ListItem
             button
             key={link.to}
